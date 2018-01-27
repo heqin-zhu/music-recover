@@ -33,9 +33,6 @@ class netEaseMusic:
         self.lrcSentencePt=re.compile(r'\[\d+:\d+.\d+\]([\w\d]+)\\n')         # wrong  (r'\[\d+,\d+\](\(\d+,\d+\)(\w))+\n')
         self.hasLrcPt= re.compile(r'(lyric|lrc|klyric|kalaokLyric|tlyric)\s*[\'\"]:\s*[\'\"]\s*\[')
         self.lrcKey = li = 'lyric|lrc|klyric|kalaokLyric|tlyric'.split('|')
-        self.musicName=[]
-        self.singers=[]
-        self.unameId=[]
     def prep(self):   
         self.prt= os.path.dirname(os.getcwd())
         self.cd('cached_网易云音乐')
