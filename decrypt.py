@@ -34,9 +34,9 @@ class netEaseMusic:
         self.lrcSentencePt=re.compile(r'\[\d+:\d+\.\d+\](.*?)\\n')         # wrong  (r'\[\d+,\d+\](\(\d+,\d+\)(\w))+\n')     
     def prep(self):   
         self.prt= os.path.dirname(os.getcwd())
-        self.cd('cached_网易云音乐_test')
-        self.cd('cached_网易云音乐_test/lyric')
-        self.cd('cached_网易云音乐_test/music')
+        self.cd('cached_网易云音乐')
+        self.cd('cached_网易云音乐/lyric')
+        self.cd('cached_网易云音乐/music')
         
     def cd(self,s):
         '''cd to the dir path+s, (create it first if not exists)'''
@@ -86,7 +86,7 @@ class netEaseMusic:
         with open (fileName,'rb') as f:
             btay = bytearray(f.read())
         musicId = self.getId(fileName)
-        self.cd('cached_网易云音乐_test/music')
+        self.cd('cached_网易云音乐/music')
         with open(str(musicId),'wb') as out:
             for i,j in enumerate(btay):
                 btay[i] = j ^ 0xa3
@@ -138,7 +138,7 @@ class netEaseMusic:
             except:
                 print('fail to get lyric of music  '+name)
                 return  
-        self.cd('cached_网易云音乐_test/lyric')
+        self.cd('cached_网易云音乐/lyric')
         with open(name +'.txt','w',encoding ='utf8') as f:
             f.write(name+'\n\n')
             f.write('\n'.join(lrc_lst))
