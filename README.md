@@ -1,4 +1,5 @@
 ![warning](http://ounix1xcw.bkt.clouddn.com/warning.png)
+
 （学习使用异或加密 :see_no_evil:
 
 下面是使用说明书
