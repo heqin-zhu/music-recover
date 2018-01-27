@@ -20,11 +20,11 @@
  可以pip install 安装，常见问题可以自行搜索解决
  
  # 缓存文件
- 找到缓存文件的路径， 形如`...../netease/cloudmusic/Cache/Music1`，如果想单独复制过来，请复制 `Music1`和`Lyric`文件夹在同一目录下，再得到路径,
+ 找到缓存文件的路径， 形如`.../netease/cloudmusic/Cache/Music1`，如果想单独复制过来，请复制 `Music1`和`Lyric`文件夹在同一目录下，再得到路径,
  
  # 运行
  ## 在命令行模式下
- python3 netease-music.py  *path*
+ python3 decrypt.py  *path*
  
  如果不在 netease-music.py所在目录下，可以切换到，或者用它的绝对路径，
  path是上一步得到的路径
