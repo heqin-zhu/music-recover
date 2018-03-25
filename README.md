@@ -36,5 +36,5 @@
  # 结果
  你就可以到Music1所在目录下的`cached_网易云音乐`看到lyric, music了 :smiley: 
  # Licence
- [MIT](mit-licence.txt)
+ [MIT](LICENCE-MIT.txt)
 
