@@ -156,9 +156,9 @@ class netEaseMusic:
             self.getLyric(musicId)
 
 
-
-path = sys.argv[1:][0].strip()
-#path = 'C:\\Users\\mbinary\\Desktop\\source\\\\myscripts\\Music1'
-hd = netEaseMusic(path)
-hd.getMusic()
+if __name__=='__main__':
+	path = sys.argv[1:][0].strip()
+	#path = 'C:\\Users\\mbinary\\Desktop\\source\\\\myscripts\\Music1'
+	hd = netEaseMusic(path)
+	hd.getMusic()
 
