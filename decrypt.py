@@ -13,6 +13,12 @@ API = 'https://api.imjad.cn/cloudmusic/?'
 # type=song, lyric, comments, detail, artist, album, search
 # eg  API = 'https://api.imjad.cn/cloudmusic/?type=song&id=1234132'    download music
 
+hasModu = False
+try:
+    from mutagen.easyid3 import EasyID3
+    from mutagen.mp3 import MP3
+    hasModu = True
+except:pass
 
 class netease_music:
     def __init__(self,path=''):
@@ -46,11 +52,9 @@ class netease_music:
         if not os.path.exists(path):
             print('Can not find file '+path)
             return {}
-        try:
-            from mutagen.easyid3 import EasyID3
-            from mutagen.mp3 import MP3
+        elif hasModu:
             return dict(MP3(path,ID3 = EasyID3))
-        except: 
+        else: 
             print('[Error ] You can use pip3 to install mutagen or connet to the Internet')
             raise Exception('Failed to get info of '+path)
 
