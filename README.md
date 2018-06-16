@@ -1,4 +1,4 @@
-# 网易云音乐缓存文件解 --> MP3
+# 网易云音乐缓存文件 --> MP3
 >网易云音乐的缓存文件经过处理,也就是异或加密了的,要获得MP3文件,需要解密. 这个仅用于学习. 请大家尊重音乐的版权.其实大多数歌曲都是可以下载的
 
 ![warning](http://ounix1xcw.bkt.clouddn.com/warning.png)
@@ -34,10 +34,13 @@
 ## 结果
  你就可以到 `Music1` 的父目录下 看到 `cached_网易云音乐`, 以及其中的 `lyric`, `music` :smiley: 
 
+* 运行输出
  ![](src/result.jpg)
  
+* 歌词
  ![](src/lyric.jpg)
 
+* MP3
  ![](src/music.jpg)
 
 ## 贡献
