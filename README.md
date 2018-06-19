@@ -25,7 +25,7 @@
 ## 使用
 
 ### 找到缓存文件
- 找到缓存文件的路径，`netease/cloudmusic/Cache/Music1`，复制到电脑上, 在电脑上的路径记为 `PATH`
+ 在手机上找到缓存文件的路径，`netease/cloudmusic/Cache/Music1`，复制到电脑上, 在电脑上的路径记为 `PATH`
  
 ### 运行
 * 在命令行模式下
