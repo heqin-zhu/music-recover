@@ -4,7 +4,7 @@ import sys
 import glob
 import requests 
 
-DESDIR = 'cached_网易云音乐'
+DESDIR = '../cached_网易云音乐'
 LRCDIR = os.path.join(DESDIR,'lyric')
 MSCDIR = os.path.join(DESDIR,'music')
 
@@ -78,6 +78,8 @@ class netease_music:
         try:
             dic = self.getInfoFromWeb(musicId)
         except Exception as e:
+            print(e)
+            print('正在尝试获取 MP3 文件的元数据 ')
             dic = self.getInfoFromFile(os.path.join(MSCDIR,musicId))
         name = self.genName(dic)
         self.id_mp [musicId] = name
