@@ -68,7 +68,7 @@ class netease_music:
         with open (fileName,'rb') as f:
             btay = bytearray(f.read())
         musicId = self.getId(fileName)
-        idpath = os.path.join(MSCDIR,musicId)
+        idpath = os.path.join(MSCDIR,musicId+'.mp3')
         if not os.path.exists(idpath):
             with open(idpath,'wb') as out:
                 for i,j in enumerate(btay):
@@ -84,8 +84,11 @@ class netease_music:
         name = self.genName(dic)
         self.id_mp [musicId] = name
         path = os.path.join(MSCDIR,name+'.mp3')
-        if os.path.exists(idpath) and not os.path.exists(path):
-            os.rename(idpath,path)
+        if os.path.exists(idpath):
+            if os.path.exists(path):
+                os.remove(idpath)
+            else:
+                os.rename(idpath,path)
         return musicId
     
     def getLyric(self,musicId):
