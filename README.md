@@ -21,27 +21,29 @@
   - mutagen (optional)
   
 可以pip3 install 安装
- 
+
 ## 使用
 
 ### 找到缓存文件
- 在手机上找到缓存文件的路径，`netease/cloudmusic/Cache/Music1`，复制到电脑上, 在电脑上的路径记为 `PATH`
- 
+在手机上找到缓存文件的路径，`netease/cloudmusic/Cache/Music1`，复制到电脑上, 在电脑上的路径记为 `PATH`
+
+在电脑上一般为 `**/cloudmusicdata/Cache` 。
+
 ### 运行
 * 在命令行模式下
-`python3 decrypt.py  PATH`
-这里的 `PATH`  就是缓存文件的位置
- 
-也可以将这脚本复制到缓存文件目录的父目录中, 直接运行脚本即可
+  `python3 decrypt.py PATH`
+  这里的 `PATH`  就是缓存文件（包含`.uc` 或 `.uc!` 文件）的位置
+
+也可以将这脚本复制到缓存文件目录中, 直接运行脚本即可
 ## 展示
 这是 gif 
 ![](src/display.gif)
 ## 结果
- 你就可以到 `Music1` 的父目录下 看到 `cached_网易云音乐`, 以及其中的 `lyric`, `music` :smiley: 
+ 你就可以到缓存文件目录的父目录下 看到 `cached_网易云音乐`, 以及其中的 `lyric`, `music` :smiley: 
 
 * 运行输出
  ![](src/result.jpg)
- 
+
 * 歌词
  ![](src/lyric.jpg)
 
