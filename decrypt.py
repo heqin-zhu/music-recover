@@ -49,10 +49,10 @@ class netease_music:
 
     def getInfoFromWeb(self, musicId):
         dic = {}
-        url = API+'type=detail&id=' + str(musicId)
+        url = API+'type=detail&id=' + musicId
         info = requests.get(url).json()['songs'][0]
         dic['artist'] = [info['ar'][0]['name']]
-        dic['title'] = [info['al']['name']]
+        dic['title'] = [info['name']]
         dic['cover'] = [info['al']['picUrl']]
         return dic
 
@@ -66,57 +66,64 @@ class netease_music:
             print('[Error] You can use pip3 to install mutagen or connet to the Internet')
             raise Exception('Failed to get info of ' + path)
 
-    def genName(self, dic):
+    def getPath(self, dic,musicId):
         title = dic['title'][0]
         artist = dic['artist'][0]
         if artist in title:
             title = title.replace(artist, '').strip()
-        return title + '--' + artist
-
-    def decrypt(self, fileName):
-        with open(fileName, 'rb') as f:
-            btay = bytearray(f.read())
-        musicId = self.getId(fileName)
-        idpath = os.path.join(MSCDIR, musicId + '.mp3')
-        if not os.path.exists(idpath):
-            with open(idpath, 'wb') as out:
-                for i, j in enumerate(btay):
-                    btay[i] = j ^ 0xa3
-                out.write(bytes(btay))
-        dic = {}
-        try:
-            dic = self.getInfoFromWeb(musicId)
-        except Exception as e:
-            print(e)
-            print('正在尝试获取 MP3 文件的元数据 ')
-            dic = self.getInfoFromFile(os.path.join(MSCDIR, musicId))
-        name = self.genName(dic)
+        name = (title + '--' + artist).replace(':','-') # if name contains :, it will be wrong in wondows
         self.id_mp[musicId] = name
-        path = os.path.join(MSCDIR, name + '.mp3').replace(u'\u200b/\u200b', '')
-        if os.path.exists(idpath):
+        #print('''{{title: "{title}",artist: "{artist}",mp3: "http://ounix1xcw.bkt.clouddn.com/{name}.mp3",cover: "{cover}",}},'''\
+               #.format(title = title,name = name,artist=artist,cover=dic['cover'][0]))
+        return os.path.join(MSCDIR, name + '.mp3')
+    
+    def decrypt(self, cachePath):
+        musicId = self.getId(cachePath)
+        idpath = os.path.join(MSCDIR, musicId + '.mp3')
+        try:  # from web
+            dic = self.getInfoFromWeb(musicId)
+            path = self.getPath(dic,musicId)
+            if os.path.exists(path): return 
+            with open(path,'wb') as f:
+                f.write(bytes(self._decrypt(cachePath)))
+        except Exception as e:  # from file
+            print(e)
+            if not os.path.exists(idpath):
+                with open(idpath,'wb') as f:
+                    f.write(bytes(self._decrypt(cachePath)))
+            dic = self.getInfoFromFile(idpath)
+            path = getPath(dic,musicId)
             if os.path.exists(path):
                 os.remove(idpath)
-            else:
-                os.rename(idpath, path)
-        return musicId
-
+                return 
+            os.rename(idpath, path)
+            
+    def _decrypt(self,cachePath):
+        with open(cachePath, 'rb') as f:
+            btay = bytearray(f.read())
+        for i, j in enumerate(btay):
+            btay[i] = j ^ 0xa3
+        return btay
+    
     def getLyric(self, musicId):
         name = self.id_mp[musicId]
         # 'http://music.163.com/api/song/lyric?id='
-        url = API + 'type=lyric&id=' + str(musicId)
+        url = API + 'type=lyric&id=' + musicId
         try:
-            lrc = requests.get(url).json()
-            file = os.path.join(LRCDIR, name + '.lrc').replace(u'\u200b/\u200b', '')
+            lrc = requests.get(url).json()['lrc']['lyric']
+            if lrc=='':
+                raise Exception('')
+            file = os.path.join(LRCDIR, name + '.lrc')
             if not os.path.exists(file):
                 with open(file, 'w', encoding='utf8') as f:
                     f.write(str(lrc))
         except Exception as e:
-            print(e, ' Failed to get lyric of music '+name)
-
+            print(e,' Failed to get lyric of music '+name)
     def getMusic(self):
-        for ct, i in enumerate(self.files):
-            musicId = self.decrypt(i)
-            print('[Music {}]'.format(ct+1).ljust(12)+self.id_mp[musicId])
+        for ct, cachePath in enumerate(self.files):
+            self.decrypt(cachePath)
+            musicId = self.getId(cachePath)
+            print('[{}]'.format(ct+1).ljust(5)+self.id_mp[musicId])
             self.getLyric(musicId)
 
 
@@ -124,6 +131,6 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         path = sys.argv[1].strip()
     else:
-        path = os.path.join(os.getcwd(), '')
+        path = os.path.join(os.getcwd(), 'Music1')
     handler = netease_music(path)
     handler.getMusic()

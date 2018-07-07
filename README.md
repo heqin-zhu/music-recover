@@ -9,10 +9,9 @@
 （学习使用异或加密 :see_no_evil: )
 
 ## 介绍
-用于获取网易云音乐缓存文件的mp3文件
+这是一个用于获取网易云音乐缓存文件的mp3文件的 python script.
 
-缓存文件 在手机上的在 `netease/cloudmusic/Cache/`里的`Music1`里
-思路就是利用缓存文件,解密得到MP3文件, 并通过其metadata,命名文件,顺便从api或者网页抓取歌词,详细介绍可以看[这里](https://mbinary.coding.me/decrypt-netease-music.html) 
+利用缓存文件,解密得到MP3文件, 并通过其metadata,命名文件,顺便从api或者网页抓取歌词,详细介绍可以看[这里](https://mbinary.coding.me/decrypt-netease-music.html) 
 
 ## 需求
 * python3
@@ -24,20 +23,28 @@
 
 ## 使用
 
-### 找到缓存文件
-在手机上找到缓存文件的路径，`netease/cloudmusic/Cache/Music1`，复制到电脑上, 在电脑上的路径记为 `PATH`
+### 获得缓存文件
+下面两种方法都行
+* 手机上的在 `netease/cloudmusic/Cache/Music1`里,将其复制到电脑上
+* 或者在电脑上 `**/cloudmusicdata/Cache`.
 
-在电脑上一般为 `**/cloudmusicdata/Cache` 。
+最终得到的路径记为 `MUSIC`
 
 ### 运行
+下面两种方法都行
 * 在命令行模式下
-  `python3 decrypt.py PATH`
-  这里的 `PATH`  就是缓存文件（包含`.uc` 或 `.uc!` 文件）的位置
+`python3 decrypt.py $MUSIC`
 
-也可以将这脚本复制到缓存文件目录中, 直接运行脚本即可
+这里的 `MUSIC`  就是缓存文件（包含`.uc` 或 `.uc!` 文件）的地址
+
+* 复制此脚本到缓存文件的父目录,要求缓存文件命名为`Music1`, 然后直接运行脚本
+
+我在 这个 repo 里面上传了几个缓存文件,可以作为测试,在 [Music1](Music1) 中
+
 ## 展示
 这是 gif 
 ![](src/display.gif)
+
 ## 结果
  你就可以到缓存文件目录的父目录下 看到 `cached_网易云音乐`, 以及其中的 `lyric`, `music` :smiley: 
 
@@ -51,7 +58,7 @@
  ![](src/music.jpg)
 
 ## 贡献
-欢迎fork&PR
+欢迎 fork & PR
 
 ## Licence
- [MIT](LICENCE)
+[MIT](LICENCE)
