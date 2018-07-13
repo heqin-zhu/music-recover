@@ -71,7 +71,9 @@ class netease_music:
         artist = dic['artist'][0]
         if artist in title:
             title = title.replace(artist, '').strip()
-        name = (title + '--' + artist).replace(':','-') # if name contains :, it will be wrong in wondows
+        name = (title + '--' + artist)
+        for i in '>?*/\:"|<':
+            name = name.replace(i,'-') # form valid file name
         self.id_mp[musicId] = name
         #print('''{{title: "{title}",artist: "{artist}",mp3: "http://ounix1xcw.bkt.clouddn.com/{name}.mp3",cover: "{cover}",}},'''\
                #.format(title = title,name = name,artist=artist,cover=dic['cover'][0]))
@@ -107,10 +109,12 @@ class netease_music:
     
     def getLyric(self, musicId):
         name = self.id_mp[musicId]
-        # 'http://music.163.com/api/song/lyric?id='
         url = API + 'type=lyric&id=' + musicId
+        url2 = 'https://music.163.com/api/song/lyric?id='+ musicId +'&lv=1&kv=1&tv=-1'
         try:
             lrc = requests.get(url).json()['lrc']['lyric']
+            if lrc=='':
+                lrc = requests.get(url2).json()['lrc']['lyric']
             if lrc=='':
                 raise Exception('')
             file = os.path.join(LRCDIR, name + '.lrc')
