@@ -21,6 +21,12 @@ try:
 except:
     pass
 
+def safeprint(s):
+    '''deal with invalid encoded filename'''
+    try:
+        print(s)
+    except:
+        print(repr(s)[1:-1])
 
 class netease_music:
     def __init__(self, path=''):
@@ -28,7 +34,7 @@ class netease_music:
         if path == '':
             path = input('input the path of cached netease_music')
         self.path = path
-        print('[+] Current Path: ' + path)
+        safeprint('[+] Current Path: ' + path)
         os.chdir(path)
         self.files = glob.glob('*.uc') + glob.glob('*.uc!')
         self.id_mp = {}
@@ -58,7 +64,7 @@ class netease_music:
 
     def getInfoFromFile(self, path):
         if not os.path.exists(path):
-            print('Can not find file ' + path)
+            safeprint('Can not find file ' + path)
             return {}
         elif hasModu:
             return dict(MP3(path, ID3=EasyID3))
@@ -122,7 +128,8 @@ class netease_music:
                 with open(file, 'w', encoding='utf8') as f:
                     f.write(str(lrc))
         except Exception as e:
-            print(e,' Failed to get lyric of music '+name)
+            print(e,end='')
+            safeprint(': Failed to get lyric of music '+name)
     def getMusic(self):
         for ct, cachePath in enumerate(self.files):
             self.decrypt(cachePath)
