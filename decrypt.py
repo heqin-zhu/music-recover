@@ -86,7 +86,7 @@ class netease_music:
         artist = dic['artist'][0]
         if artist in title:
             title = title.replace(artist, '').strip()
-        name = (title + '--' + artist)
+        name = artist + ' - ' + title
         for i in '>?*/\:"|<':
             name = name.replace(i,'-') # form valid file name
         self.id_mp[musicId] = name
@@ -172,7 +172,7 @@ class netease_music:
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         path = sys.argv[1].strip()
-    else:
-        path = os.path.join(os.getcwd(), 'Music1')
+    if len(sys.argv) > 2:
+        MSCDIR = sys.argv[2]
     handler = netease_music(path)
     handler.getMusic()
