@@ -18,11 +18,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 MSCDIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '网易云音乐缓存')
-
-API = 'https://api.imjad.cn/cloudmusic/?'
-# two args: id  type
-# type=song, lyric, comments, detail, artist, album, search
-# eg  API = 'https://api.imjad.cn/cloudmusic/?type=song&id=537854958'    download music
+headers = {'User-agent': 'Mozilla/5.0'}
 
 hasModu = False
 try:
@@ -63,12 +59,13 @@ class netease_music:
 
     def getInfoFromWeb(self, musicId):
         dic = {}
-        url = API+'type=detail&id=' + musicId
-        info = requests.get(url).json()['songs'][0]
-        dic['artist'] = [info['ar'][0]['name']]
+        url = 'http://music.163.com/api/song/detail/?ids=[' + musicId + ']'
+        res = requests.get(url, headers = headers).json()
+        info = res['songs'][0]
+        dic['artist'] = [info['artists'][0]['name']]
         dic['title'] = [info['name']]
-        dic['cover'] = [info['al']['picUrl']]
-        dic['album'] = [info['al']['name']]
+        dic['cover'] = [info['album']['picUrl']]
+        dic['album'] = [info['album']['name']]
         return dic
 
     def getInfoFromFile(self, path):
@@ -109,11 +106,11 @@ class netease_music:
                 with open(idpath,'wb') as f:
                     f.write(bytes(self._decrypt(cachePath)))
             info = self.getInfoFromFile(idpath)
-            path = getPath(info, musicId)
+            path = self.getPath(info, musicId)
             if os.path.exists(path):
                 os.remove(idpath)
-                return 
-            os.rename(idpath, path)
+            else:
+                os.rename(idpath, path)
         return info, path
 
     def _decrypt(self,cachePath):
@@ -125,12 +122,9 @@ class netease_music:
 
     def getLyric(self, musicId):
         name = self.id_mp[musicId]
-        url = API + 'type=lyric&id=' + musicId
-        url2 = 'https://music.163.com/api/song/lyric?id='+ musicId +'&lv=1&kv=1&tv=-1'
+        url = 'http://music.163.com/api/song/lyric?id='+ musicId +'&lv=1&kv=1&tv=-1'
         try:
             lrc = requests.get(url).json()['lrc']['lyric']
-            if lrc=='':
-                lrc = requests.get(url2, verify=False).json()['lrc']['lyric']
             if lrc=='':
                 raise Exception('')
 
@@ -152,9 +146,12 @@ class netease_music:
         if len(tags.getall("USLT")) != 0:
             tags.delall("USLT")
 
-        tags.add(TALB(encoding=3, lang='', desc='', text=info['album'][0]))
-        tags.add(TIT2(encoding=3, lang='', desc='', text=info['title'][0]))
-        tags.add(TPE1(encoding=3, lang='', desc='', text=info['artist'][0]))
+        if ('album' in info):
+            tags.add(TALB(encoding=3, lang='', desc='', text=info['album'][0]))
+        if ('title' in info):
+            tags.add(TIT2(encoding=3, lang='', desc='', text=info['title'][0]))
+        if ('artist' in info):
+            tags.add(TPE1(encoding=3, lang='', desc='', text=info['artist'][0]))
 
         for key,values in tags.items():
             print('\t', key, ': ', values, sep='')
