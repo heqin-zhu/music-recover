@@ -152,9 +152,18 @@ class netease_music:
             tags.add(TIT2(encoding=3, lang='', desc='', text=info['title'][0]))
         if ('artist' in info):
             tags.add(TPE1(encoding=3, lang='', desc='', text=info['artist'][0]))
+        if ('cover' in info):
+            tags.add(APIC(
+                        encoding = 3,
+                        mime     = 'image/png',
+                        type     = 3,
+                        desc     = 'cover',
+                        data     = requests.get(info['cover'][0], stream=True).raw.read()
+                        ))
 
         for key,values in tags.items():
-            print('\t', key, ': ', values, sep='')
+            if key != 'APIC:cover':
+                print('\t', key, ': ', values, sep='')
 
         tags.add(USLT(encoding=3, lang='eng', desc='aaa', text=lrc))
         tags.save()
