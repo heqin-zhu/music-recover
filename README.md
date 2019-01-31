@@ -1,25 +1,30 @@
-# 网易云音乐缓存文件 --> MP3
->网易云音乐的缓存文件经过处理,也就是异或加密了的,要获得MP3文件,需要解密. 这个仅用于学习. 请大家尊重音乐的版权.其实大多数歌曲都是可以下载的
-# 注意
-最新更新在 github 上, 博客很少更新, 所以如果你是从博客来的,
-请再读一遍下面的 README 
+# netease-music-cracker
+[![Stars](https://img.shields.io/github/stars/mbinary/netease-music-cracker.svg?label=Stars&style=social)](https://github.com/mbinary/netease-music-cracker/stargazers)
+[![Forks](https://img.shields.io/github/forks/mbinary/netease-music-cracker.svg?label=Fork&style=social)](https://github.com/mbinary/netease-music-cracker/network/members)
+[![repo-size](https://img.shields.io/github/repo-size/mbinary/netease-music-cracker.svg)]()
+[![License](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](LICENSE)
+[![Language](https://img.shields.io/badge/language-python3.6-orange.svg)]()
+<!--  [![License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)  copy LICENCE -->
+<!-- 控制图片: <img width="60" height="75" align="right" src="haha"> -->
+# 前言
+![warning](src/warning.png)
 
-![warning](http://ounix1xcw.bkt.clouddn.com/warning.png)
-
-（学习使用异或加密 :see_no_evil: )
+网易云音乐的缓存文件经过处理,也就是异或加密了的,要获得MP3文件,需要解密. 这个仅用于学习. 请大家**尊重版权**.其实大多数歌曲都是可以下载的
 
 ## 介绍
-这是一个用于获取网易云音乐缓存文件的mp3文件的 python script.
-
+从网易云音乐缓存文件得到 mp3 格式. 
 利用缓存文件,解密得到MP3文件, 并通过其metadata,命名文件,顺便从api或者网页抓取歌词,详细介绍可以看[这里](https://mbinary.coding.me/decrypt-netease-music.html) 
 
-## 需求
+## 依赖
 * python3
 * python 模块
   - requests
   - mutagen (optional)
-  
-可以pip3 install 安装
+运行 一下命令安装
+```python
+sudo pip install requests
+sudo pip install mutagen
+```
 
 ## 使用
 
@@ -56,9 +61,3 @@
 
 * MP3
  ![](src/music.jpg)
-
-## 贡献
-欢迎 fork & PR
-
-## Licence
-[MIT](LICENCE)
