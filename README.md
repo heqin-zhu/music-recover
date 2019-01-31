@@ -4,6 +4,8 @@
 [![repo-size](https://img.shields.io/github/repo-size/mbinary/netease-music-cracker.svg)]()
 [![License](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](LICENSE)
 [![Language](https://img.shields.io/badge/language-python3.6-orange.svg)]()
+[![Build](https://travis-ci.org/mbinary/netease-music-cracker.svg?branch=master)]()
+[![Coverage](https://codecov.io/gh/mbinary/netease-music-cracker/branch/master/graph/badge.svg)]()
 <!--  [![License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)  copy LICENCE -->
 <!-- 控制图片: <img width="60" height="75" align="right" src="haha"> -->
 # 前言
@@ -20,40 +22,43 @@
 * python 模块
   - requests
   - mutagen (optional)
-运行 一下命令安装
-```python
-sudo pip install requests
-sudo pip install mutagen
+运行 如下命令安装
+```shell
+$ sudo apt-get install python3
+$ pip install -r requirements.txt
 ```
 
 ## 使用
+### 先找到缓存文件路径
+mac pro or windows 使用者 可以跳过此步骤(因为我知道路径  (●ˇ∀ˇ●))
 
-### 获得缓存文件
-下面两种方法都行
-* 手机上的在 `netease/cloudmusic/Cache/Music1`里,将其复制到电脑上
-* 或者在电脑上 `**/cloudmusicdata/Cache`.
 
-最终得到的路径记为 `MUSIC`
+- linux
+- 手机:  将`/netease/cloudmusic/Cache/Music1`文件夹复制到电脑上, 记为
+- 以及运行过程中出现'Path not found', 'No cache file'的使用者
+
+找到后缀为 .uc!, .uc的文件夹即可.  (我没有在 linux 上用过 网易云音乐, 所以我现在不知道路径, 需要使用者自己找, 欢迎知道的同学告诉我)
+
+然后修改 config.py 文件中 `SRCDIR` 那一行(最后一行).
+例如 你找到路径为`/music/cache`,  则修改为 `SRCDIR = '/music/cache'` (行首不要有多余的空白)
 
 ### 运行
-下面两种方法都行
-* 在命令行模式下
-`python3 decrypt.py $MUSIC`
+- 命令行
+```shell
+$ python3 decrypt.py
+```
+- python 程序 直接运行
 
-这里的 `MUSIC`  就是缓存文件（包含`.uc` 或 `.uc!` 文件）的地址
-
-* 复制此脚本到缓存文件的父目录,要求缓存文件命名为`Music1`, 然后直接运行脚本
 
 我在 这个 repo 里面上传了几个缓存文件,可以作为测试,在 [Music1](Music1) 中
 
 ## 展示
-这是 gif 
 ![](src/display.gif)
 
 ## 结果
- 你就可以到缓存文件目录的父目录下 看到 `cached_网易云音乐`, 以及其中的 `lyric`, `music` :smiley: 
+在当前目录(运行此脚本的目录)中得到`cached_网易云音乐`:smiley: 
 
-* 运行输出
+* 输出
  ![](src/result.jpg)
 
 * 歌词

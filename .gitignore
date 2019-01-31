@@ -1,0 +1,5 @@
+cached_网易云音乐/**
+.*
+!.gitignore
+!.travis.yml
+__pycache__/**
