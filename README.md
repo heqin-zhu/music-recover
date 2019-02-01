@@ -1,11 +1,10 @@
 # netease-music-cracker
 [![Stars](https://img.shields.io/github/stars/mbinary/netease-music-cracker.svg?label=Stars&style=social)](https://github.com/mbinary/netease-music-cracker/stargazers)
 [![Forks](https://img.shields.io/github/forks/mbinary/netease-music-cracker.svg?label=Fork&style=social)](https://github.com/mbinary/netease-music-cracker/network/members)
-[![repo-size](https://img.shields.io/github/repo-size/mbinary/netease-music-cracker.svg)]()
+[![repo-size](https://img.shields.io/github/repo-size/mbinary/netease-music-cracker.svg)](.)
 [![License](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](LICENSE)
-[![Language](https://img.shields.io/badge/language-python3.6-orange.svg)]()
-[![Build](https://travis-ci.org/mbinary/netease-music-cracker.svg?branch=master)]()
-[![Coverage](https://codecov.io/gh/mbinary/netease-music-cracker/branch/master/graph/badge.svg)]()
+[![Build](https://travis-ci.org/mbinary/netease-music-cracker.svg?branch=master)](.)
+[![Coverage](https://codecov.io/gh/mbinary/netease-music-cracker/branch/master/graph/badge.svg)](http://codecov.io/github/mbinary/netease-music-cracker?branch=master)
 <!--  [![License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)  copy LICENCE -->
 <!-- 控制图片: <img width="60" height="75" align="right" src="haha"> -->
 # 前言
