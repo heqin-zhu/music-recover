@@ -6,6 +6,7 @@
 [![Language](https://img.shields.io/badge/language-python3.6-orange.svg)](.)
 [![Build](https://travis-ci.org/mbinary/netease-music-cracker.svg?branch=master)](https://travis-ci.org/mbinary/netease-music-cracker?branch=master)
 [![Coverage](https://codecov.io/gh/mbinary/netease-music-cracker/branch/master/graph/badge.svg)](https://codecov.io/github/mbinary/netease-music-cracker?branch=master)
+[![codebeat badge](https://codebeat.co/badges/4ef725b5-405a-4390-a860-a86deefab3f8)](https://codebeat.co/projects/github-com-mbinary-netease-music-cracker-master)
 <!--  [![License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)  copy LICENCE -->
 <!-- 控制图片: <img width="60" height="75" align="right" src="haha"> -->
 # 前言
@@ -29,6 +30,7 @@ $ pip install -r requirements.txt
 
 ## 使用
 ![](src/flow-chart.png)
+
 (我没有在 linux 上用过 网易云音乐, 所以我现在不知道路径, 需要使用者自己找, 欢迎知道的同学告诉我)
 
 我上传了两个示例文件在 `src/music`中, 
