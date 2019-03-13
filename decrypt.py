@@ -1,17 +1,19 @@
-#coding : utf-8
+# coding : utf-8
+from __future__ import print_function
 import os
 import sys
 import getpass
 import requests
-import mutagen
+
+
+from mutagen.mp3 import MP3
+from mutagen.easyid3 import EasyID3
+from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, USLT  # error
+# ID3 info:
 
 # two args: id  type
 # type=song, lyric, comments, detail, artist, album, search
 # eg  API = 'https://api.imjad.cn/cloudmusic/?type=song&id=1234132'    download music
-
-
-from mutagen.id3 import ID3, APIC, TIT2, TPE1, TRCK, TALB, USLT, error
-# ID3 info:
 # APIC: picture
 # TIT2: title
 # TPE1: artist
@@ -24,6 +26,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 MSCDIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '网易云音乐缓存')
 headers = {'User-agent': 'Mozilla/5.0'}
+
 
 def safeprint(s):
     '''deal with invalid encoded filename'''
@@ -77,7 +80,7 @@ class netease_music:
         if artist in title:
             title = title.replace(artist, '').strip()
         name = artist + ' - ' + title
-        for i in '>?*/\:"|<':
+        for i in '>?*/\\:"|<':
             name = name.replace(i,'-') # form valid file name
         self.id_name[musicId] = name
         #print('''{{title: "{title}",artist: "{artist}",mp3: "http://ounix1xcw.bkt.clouddn.com/{name}.mp3",cover: "{cover}",}},'''\

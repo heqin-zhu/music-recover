@@ -35,7 +35,7 @@ $ pip install -r requirements.txt
 
 我上传了两个示例文件在 `src/music`中, 
 可以运行
-`python decrypt.py src/music` 尝试
+`python3 decrypt.py src/music` 尝试
 
 ## 展示
 ![](src/display.gif)
