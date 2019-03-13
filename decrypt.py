@@ -66,11 +66,8 @@ class netease_music:
         if not os.path.exists(path):
             safeprint('Can not find file ' + path)
             return {}
-        elif hasModu:
-            return dict(MP3(path, ID3=EasyID3))
         else:
-            print('[Error] You can use pip3 to install mutagen or connet to the Internet')
-            raise Exception('Failed to get info of ' + path)
+            return dict(MP3(path, ID3=EasyID3))
 
 
     def getPath(self, dic,musicId):
