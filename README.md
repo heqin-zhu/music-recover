@@ -40,6 +40,9 @@ $ pip install -r requirements.txt
 ## 展示
 ![](images/display.gif)
 
-## 结果
-在当前目录(运行此脚本的目录)中, 生成文件夹`网易云音乐缓存`, 结果就在其中:smiley: 
+结果在文件夹`网易云音乐缓存:smiley: 
+## 贡献
+Pull request
+
+[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/0)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/0)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/1)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/1)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/2)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/2)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/3)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/3)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/4)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/4)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/5)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/5)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/6)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/6)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/7)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/7)
 
