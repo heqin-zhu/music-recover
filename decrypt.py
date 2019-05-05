@@ -21,8 +21,6 @@ from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, USLT  # error
 # TALB: album
 # USLT: lyric
 
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 MSCDIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '网易云音乐缓存')
 headers = {'User-agent': 'Mozilla/5.0'}
