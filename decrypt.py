@@ -10,6 +10,7 @@ from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, USLT
 
 # ID3 info:
+'''
 keyMap = {'APIC': 'cover',
           'TIT2': 'title',
           'TPE1': 'artist',
@@ -17,10 +18,11 @@ keyMap = {'APIC': 'cover',
           'TALB': 'album',
           'USLT': 'lyric'
           }
+'''
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 headers = {'User-agent': 'Mozilla/5.0'}
-VERBOSE = False
-MSCDIR = os.path.abspath('./网易云音乐缓存')
+VERBOSE = True
+MSCDIR = './网易云音乐缓存'
 # '''deal with invalid encoded filename'''
 # print(repr(s)[1:-1])
 
@@ -81,6 +83,7 @@ class netease_music:
         cachePath = os.path.join(self.path, name)
         musicId = self.name_id[name]
         idpath = os.path.join(MSCDIR, musicId + '.mp3')
+        path = ''
         try:  # from web
             info = self.getInfoFromWeb(musicId)
             path = self.getPath(info, musicId)
@@ -89,6 +92,7 @@ class netease_music:
                     f.write(bytes(self._decrypt(cachePath)))
         except Exception as e:  # from file
             print(e)
+            '''
             if not os.path.exists(idpath):
                 with open(idpath, 'wb') as f:
                     f.write(bytes(self._decrypt(cachePath)))
@@ -104,7 +108,7 @@ class netease_music:
                     os.rename(idpath, path)
             else:
                 os.remove(idpath)
-                path = ''
+            '''
         return info, path
 
     def _decrypt(self, cachePath):
@@ -117,14 +121,11 @@ class netease_music:
     def getLyric(self, musicId):
         url = 'http://music.163.com/api/song/lyric?id=' + musicId + '&lv=1&tv=-1'
         try:
-            lyric = requests.get(url).json()
+            lyric = requests.get(url, headers=headers).json()
             lrc = lyric['lrc']['lyric']
-            if lrc == '':
-                raise Exception('')
-
             tlrc = lyric['tlyric']['lyric']
             if tlrc:
-                # 多种语言歌词合并
+                # merge multi-lang lyrics
                 dic = {}
                 for i in lrc.splitlines():
                     a = i.replace('[', ']').strip().split("]")
@@ -135,14 +136,14 @@ class netease_music:
                     tdic[n[1].strip()] = n[-1].strip()
                 dicCopy = dic.copy()
                 dicCopy.update(tdic)
-                s = []
+                lines = []
                 for k, v in sorted(dicCopy.items(), key=lambda item: item[0]):
-                    s.append("[%s]%s" % (k.strip(), v))
-                lrc = "\n".join(s)
+                    lines.append("[%s]%s" % (k.strip(), v))
+                lrc = "\n".join(lines)
             return lrc
         except Exception as e:
             if VERBOSE:
-                print('No lyric found')
+                print('No lyric found: ', e)
             return ''
 
     def setID3(self, lrc, info, path):
@@ -164,7 +165,8 @@ class netease_music:
                 mime='image/png',
                 type=3,
                 desc='cover',
-                data=requests.get(info['cover'][0], stream=True).raw.read()
+                data=requests.get(info['cover'][0],
+                                  stream=True, headers=headers).raw.read()
             ))
         tags.add(USLT(encoding=3, lang='eng', desc='aaa', text=lrc))
         tags.save()
@@ -185,22 +187,15 @@ class netease_music:
 if __name__ == '__main__':
     platform = os.sys.platform.lower()
     user = getpass.getuser()
-    path = ''
+    pre = '/'.join(os.getcwd().split(os.sep)[:3])
     if len(sys.argv) > 1:
         path = os.path.abspath(sys.argv[1].strip())
-    elif platform.startswith('win'):
-        path = 'C:/Users/{user}/AppData/Local/Netease/CloudMusic/Cache/Cache'.format(
-            user=user)
+    elif platform.startswith('win'):  # windows
+        path = pre + '/AppData/Local/Netease/CloudMusic/Cache/Cache'
+
     else:  # mac or linux
-        pre = ''
-        segs = os.getcwd().split(os.sep)
-        if len(segs) >= 3:
-            pre = os.sep.join(segs[:3])
-        if not os.path.exists(pre):
-            pre = '/Users/' + user
-        path = os.path.join(
-            pre, 'Library/Containers/com.netease.163music/Data/Caches/online_play_cache')
+        path = pre + '/Library/Containers/com.netease.163music/Data/Caches/online_play_cache'
     if not os.path.exists(path):
-        raise Exception('[Error] Directory "{}" does not exist'.format(path))
+        print('Directory "{}" does not exist, specify cache files directory instead'.format(path))
     else:
         netease_music(path).getMusic()
