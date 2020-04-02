@@ -157,7 +157,7 @@ if __name__ == '__main__':
             user=user)
         #elif platform.startswith('linux'):
     else:  # macpro
-        path = '/Users/macbookpro({})/Library/Containers/com.netease.163music/Data/Caches/online_play_cache'.format(
+        path = '/Users/{user}/Library/Containers/com.netease.163music/Data/Caches/online_play_cache'.format(
             user=user)
     handler = netease_music(os.path.abspath(path))
     handler.getMusic()
