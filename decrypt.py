@@ -1,19 +1,17 @@
-# coding : utf-8
-from __future__ import print_function
+#coding : utf-8
 import os
 import sys
 import getpass
 import requests
-
-from mutagen.mp3 import MP3
-from mutagen.easyid3 import EasyID3
-from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, USLT  # error
-# ID3 info:
+import mutagen
 
 # two args: id  type
 # type=song, lyric, comments, detail, artist, album, search
-# eg  API = 'https://api.imjad.cn/cloudmusic/?type=song&id=1234132'
+# eg  API = 'https://api.imjad.cn/cloudmusic/?type=song&id=1234132'    download music
 
+
+from mutagen.id3 import ID3, APIC, TIT2, TPE1, TRCK, TALB, USLT, error
+# ID3 info:
 # APIC: picture
 # TIT2: title
 # TPE1: artist
@@ -21,35 +19,35 @@ from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, USLT  # error
 # TALB: album
 # USLT: lyric
 
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 MSCDIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '网易云音乐缓存')
 headers = {'User-agent': 'Mozilla/5.0'}
 
-'''
+
 def safeprint(s):
-    #deal with invalid encoded filename
+    '''deal with invalid encoded filename'''
     try:
         print(s)
     except:
         print(repr(s)[1:-1])
-'''
 
 
 class netease_music:
     def __init__(self, path=''):
         '''path is the direcoty that contains Music files(cached)'''
-        while not os.path.exists(path):
-            path = input('Input the correct directory of cached netease_music')
-        if len(os.listdir(path)) == 0:
-            raise Exception('No cache file found, change a directory')
+        if path == '':
+            path = input('input the path of cached netease_music')
         self.path = path
-        print('[+] Saved in: ' + MSCDIR)
-        self.files = [
-            i for i in os.listdir(path)
-            if i.endswith('.uc') or i.endswith('.uc!')
-        ]
+        safeprint('[+] Output Path: ' + MSCDIR)
+        self.files = [i for i in os.listdir(
+            path) if i.endswith('.uc') or i.endswith('.uc!')]
+        self.id_name = {self.getId(i): i for i in self.files}
+        self.name_id = {j: i for i, j in self.id_name.items()}
         if not os.path.exists(MSCDIR):
             os.mkdir(MSCDIR)
+        # import re
         # self.nameXpath ='//div[@class="tit"]/em[@class="f-ff2"]/text()'
         # self.lrcSentencePt=re.compile(r'\[\d+:\d+\.\d+\](.*?)\\n')         # wrong  (r'\[\d+,\d+\](\(\d+,\d+\)(\w))+\n')
 
@@ -67,37 +65,53 @@ class netease_music:
         dic['album'] = [info['album']['name']]
         return dic
 
-    def getName(self, dic, musicId):
+    def getInfoFromFile(self, path):
+        if not os.path.exists(path):
+            safeprint('Can not find file ' + path)
+            return {}
+        elif hasModu:
+            return dict(MP3(path, ID3=EasyID3))
+        else:
+            print(
+                '[Error] You can use pip3 to install mutagen or connet to the Internet')
+            raise Exception('Failed to get info of ' + path)
+
+    def getPath(self, dic, musicId):
         '''get the name of music from info dict'''
         title = dic['title'][0]
         artist = dic['artist'][0]
         if artist in title:
             title = title.replace(artist, '').strip()
         name = artist + ' - ' + title
-        for i in '>?*/\\:"|<':
+        for i in '>?*/\:"|<':
             name = name.replace(i, '-')  # form valid file name
-        return name
+        self.id_name[musicId] = name
+        # print('''{{title: "{title}",artist: "{artist}",mp3: "http://ounix1xcw.bkt.clouddn.com/{name}.mp3",cover: "{cover}",}},'''\
+        #.format(title = title,name = name,artist=artist,cover=dic['cover'][0]))
+        return os.path.join(MSCDIR, name + '.mp3')
 
-    def decrypt(self, rawname):
-        musicId = self.getId(rawname)
+    def decrypt(self, name):
+        cachePath = os.path.join(self.path, name)
+        musicId = self.name_id[name]
         idpath = os.path.join(MSCDIR, musicId + '.mp3')
-        with open(idpath, 'wb') as f:
-            f.write(bytes(self._decrypt(os.path.join(self.path, rawname))))
         try:  # from web
             info = self.getInfoFromWeb(musicId)
+            path = self.getPath(info, musicId)
+            if not os.path.exists(path):
+                with open(path, 'wb') as f:
+                    f.write(bytes(self._decrypt(cachePath)))
         except Exception as e:  # from file
-            #print(e, ' at line {}'.format(sys.exc_info()[-1].tb_lineno))
-            info = dict(MP3(path, ID3=EasyID3))
-
-        name = self.getName(info, musicId)
-
-        path = os.path.join(MSCDIR, name + '.mp3')
-        if os.path.exists(path):
-            os.remove(path)
-        os.rename(idpath, path)
-        info['lyric'] = [self.getLyric(musicId)]
-        self.setID3(info, path)
-        return name
+            print(e)
+            if not os.path.exists(idpath):
+                with open(idpath, 'wb') as f:
+                    f.write(bytes(self._decrypt(cachePath)))
+            info = self.getInfoFromFile(idpath)
+            path = self.getPath(info, musicId)
+            if os.path.exists(path):
+                os.remove(idpath)
+            else:
+                os.rename(idpath, path)
+        return info, path
 
     def _decrypt(self, cachePath):
         with open(cachePath, 'rb') as f:
@@ -107,43 +121,80 @@ class netease_music:
         return btay
 
     def getLyric(self, musicId):
-        url = 'http://music.163.com/api/song/lyric?id=' + musicId + '&lv=1&kv=1&tv=-1'
-        try:
-            return requests.get(url).json()['lrc']['lyric']
-        except:
-            return ''
+        name = self.id_name[musicId]
+        url = 'http://music.163.com/api/song/lyric?id=' + musicId + '&lv=1&tv=-1'
 
-    def setID3(self, info, path):
+        try:
+            lyric = requests.get(url).json()
+            lrc = lyric['lrc']['lyric']
+            if lrc == '':
+                raise Exception('')
+
+            tlrc = lyric['tlyric']['lyric']
+            if tlrc:
+                # 多种语言歌词合并
+                dic = {}
+                for i in lrc.splitlines():
+                    a = i.replace('[', ']').strip().split("]")
+                    dic[a[1].strip()+' '] = a[-1].strip()
+                tdic = {}
+                for m in tlrc.splitlines():
+                    n = m.replace('[', ']').strip().split(']')
+                    tdic[n[1].strip()] = n[-1].strip()
+                dicCopy = dic.copy()
+                dicCopy.update(tdic)
+                s = []
+                for k, v in sorted(dicCopy.items(), key=lambda item: item[0]):
+                    s.append("[%s]%s" % (k.strip(), v))
+                lrc = "\n".join(s)
+            return lrc
+            # write lrc file
+            # LRCDIR = os.path.join(MSCDIR, 'lyric')
+            # if not os.path.exists(LRCDIR):
+            #     os.mkdir(LRCDIR)
+            # file = os.path.join(LRCDIR, name + '.lrc')
+            # if not os.path.exists(file):
+            #     with open(file, 'w', encoding='utf8') as f:
+            #         f.write(str(lrc))
+        except Exception as e:
+            safeprint('{} Failed to get lyric of music. Line {}: {}'.format(
+                name, format(sys.exc_info()[-1].tb_lineno), e))
+
+    def setID3(self, lrc, info, path):
         tags = ID3(path)
         # remove old unsychronized lyrics
         if len(tags.getall("USLT")) != 0:
             tags.delall("USLT")
 
+        if ('album' in info):
+            tags.add(TALB(encoding=3, lang='', desc='', text=info['album'][0]))
+        if ('title' in info):
+            tags.add(TIT2(encoding=3, lang='', desc='', text=info['title'][0]))
+        if ('artist' in info):
+            tags.add(TPE1(encoding=3, lang='',
+                          desc='', text=info['artist'][0]))
         if ('cover' in info):
-            tags.add(
-                APIC(
-                    encoding=3,
-                    mime='image/png',
-                    type=3,
-                    desc='cover',
-                    data=requests.get(info['cover'][0],
-                                      stream=True).raw.read()))
+            tags.add(APIC(
+                encoding=3,
+                mime='image/png',
+                type=3,
+                desc='cover',
+                data=requests.get(info['cover'][0], stream=True).raw.read()
+            ))
 
-        dic = {'title': TIT2, 'artist': TPE1, 'album': TALB, 'lyric': USLT}
+        for key, values in tags.items():
+            if key != 'APIC:cover':
+                print('\t', key, ': ', values, sep='')
 
-        for k, T in dic.items():
-            if k in info:
-                tags.add(T(encoding=3, text=info[k][0]))
-        for key in ['title', 'artist', 'album']:
-            li = tags[dic[key].__name__].text
-            print('\t{}: {}'.format(key.ljust(6), ', '.join(li)))
-
+        tags.add(USLT(encoding=3, lang='eng', desc='aaa', text=lrc))
         tags.save()
 
     def getMusic(self):
-        for ct, rawname in enumerate(self.files):
-            name = self.decrypt(rawname)
-            print('[{}]'.format(ct + 1).ljust(5) + name)
+        for ct, name in enumerate(self.files):
+            info, path = self.decrypt(name)
+            musicId = self.name_id[name]
+            print('[{}]'.format(ct+1).ljust(5)+self.id_name[musicId])
+            self.setID3(self.getLyric(musicId), info, path)
 
 
 if __name__ == '__main__':
@@ -155,9 +206,15 @@ if __name__ == '__main__':
     elif platform.startswith('win'):
         path = 'C:/Users/{user}/AppData/Local/Netease/CloudMusic/Cache/Cache'.format(
             user=user)
-        #elif platform.startswith('linux'):
+    elif platform.startswith('linux'):
+        pass  # todo
     else:  # macpro
-        path = '/Users/{user}/Library/Containers/com.netease.163music/Data/Caches/online_play_cache'.format(
-            user=user)
-    handler = netease_music(os.path.abspath(path))
-    handler.getMusic()
+        path = '/Users/macbookpro({})/Library/Containers/com.netease.163music/Data/Caches/online_play_cache'.format(user=user)
+    if not os.path.exists(path):
+        raise Exception('Path not exists')
+    if len(os.listdir(path)) == 0:
+        raise Exception('No cache file found')
+    else:
+        path = os.path.abspath(path)
+        handler = netease_music(path)
+        handler.getMusic()
