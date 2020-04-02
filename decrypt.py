@@ -33,6 +33,10 @@ class netease_music:
             path) if i.endswith('.uc') or i.endswith('.uc!')]
         if self.files == []:
             print('No cache file found in "{}"'.format(path))
+        else:
+            if not os.path.exists(MSCDIR):
+                os.mkdir(MSCDIR)
+            print('[ ]   Output Path: ' + MSCDIR)
         self.id_name = {self.getId(i): i for i in self.files}
         self.name_id = {j: i for i, j in self.id_name.items()}
 
@@ -166,10 +170,6 @@ class netease_music:
         tags.save()
 
     def getMusic(self):
-        if self.files:
-            if not os.path.exists(MSCDIR):
-                os.mkdir(MSCDIR)
-            print('[ ]   Output Path: ' + MSCDIR)
         for ct, name in enumerate(self.files):
             musicId = self.name_id[name]
             info, path = self.decrypt(name)
