@@ -9,8 +9,8 @@ from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, USLT
 
-# ID3 info:
 '''
+# ID3 info:
 keyMap = {'APIC': 'cover',
           'TIT2': 'title',
           'TPE1': 'artist',
@@ -21,10 +21,8 @@ keyMap = {'APIC': 'cover',
 '''
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 headers = {'User-agent': 'Mozilla/5.0'}
-VERBOSE = True
 MSCDIR = './网易云音乐缓存'
-# '''deal with invalid encoded filename'''
-# print(repr(s)[1:-1])
+# print(repr(s)[1:-1])  # deal with invalid encoded filename
 
 
 class netease_music:
@@ -83,32 +81,29 @@ class netease_music:
         cachePath = os.path.join(self.path, name)
         musicId = self.name_id[name]
         idpath = os.path.join(MSCDIR, musicId + '.mp3')
-        path = ''
-        try:  # from web
-            info = self.getInfoFromWeb(musicId)
+        info = self.getInfoFromWeb(musicId)
+        path = self.getPath(info, musicId)
+        if not os.path.exists(path):
+            with open(path, 'wb') as f:
+                f.write(bytes(self._decrypt(cachePath)))
+
+        '''  get info from index file
+        if not os.path.exists(idpath):
+            with open(idpath, 'wb') as f:
+                f.write(bytes(self._decrypt(cachePath)))
+        try:
+            info = self.getInfoFromFile(idpath)
+        except:
+            info = {}
+        if info != {}:
             path = self.getPath(info, musicId)
-            if not os.path.exists(path):
-                with open(path, 'wb') as f:
-                    f.write(bytes(self._decrypt(cachePath)))
-        except Exception as e:  # from file
-            print(e)
-            '''
-            if not os.path.exists(idpath):
-                with open(idpath, 'wb') as f:
-                    f.write(bytes(self._decrypt(cachePath)))
-            try:
-                info = self.getInfoFromFile(idpath)
-            except:
-                info = {}
-            if info != {}:
-                path = self.getPath(info, musicId)
-                if os.path.exists(path):
-                    os.remove(idpath)
-                else:
-                    os.rename(idpath, path)
-            else:
+            if os.path.exists(path):
                 os.remove(idpath)
-            '''
+            else:
+                os.rename(idpath, path)
+        else:
+            os.remove(idpath)
+        '''
         return info, path
 
     def _decrypt(self, cachePath):
@@ -142,8 +137,6 @@ class netease_music:
                 lrc = "\n".join(lines)
             return lrc
         except Exception as e:
-            if VERBOSE:
-                print('No lyric found: ', e)
             return ''
 
     def setID3(self, lrc, info, path):
@@ -172,16 +165,16 @@ class netease_music:
         tags.save()
 
     def getMusic(self):
-        for ct, name in enumerate(self.files):
+        ct = 0  # count successed files
+        for name in self.files:
             musicId = self.name_id[name]
-            info, path = self.decrypt(name)
-            if os.path.exists(path):
-                print('[{}]'.format(ct+1).ljust(6) + self.id_name[musicId])
-                try:
-                    self.setID3(self.getLyric(musicId), info, path)
-                except Exception as e:
-                    if VERBOSE:
-                        print('Set metadata Failed: ', e)
+            try:
+                info, path = self.decrypt(name)
+                ct += 1
+                print('[{}]'.format(ct).ljust(6) + self.id_name[musicId])
+                self.setID3(self.getLyric(musicId), info, path)
+            except Exception as e:
+                pass
 
 
 if __name__ == '__main__':
