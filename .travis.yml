@@ -1,5 +1,5 @@
 language: python
-python: "3.6"
+python: "3.5"
 
 notifications:      # 邮箱通知
   email: false
