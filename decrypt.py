@@ -21,7 +21,7 @@ keyMap = {'APIC': 'cover',
 '''
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 headers = {'User-agent': 'Mozilla/5.0'}
-MSCDIR = './网易云音乐缓存'
+MSCDIR = './mp3'
 # print(repr(s)[1:-1])  # deal with invalid encoded filename
 
 

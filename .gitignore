@@ -1,4 +1,4 @@
-网易云音乐缓存/**
+mp3/**
 .*
 !.gitignore
 !.travis.yml
