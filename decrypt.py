@@ -30,14 +30,8 @@ class netease_music:
             if not os.path.exists(MSCDIR):
                 os.mkdir(MSCDIR)
             print('[ ]   Output Path: ' + MSCDIR)
-        self.id_name = {self.getId(i): i for i in self.files}
+        self.id_name = {i[:i.find('-')]: i for i in self.files}
         self.name_id = {j: i for i, j in self.id_name.items()}
-
-    def getId(self, name):
-        return name[:name.find('-')]
-
-    def getInfoFromFile(self, path):
-        return dict(MP3(path, ID3=EasyID3))
 
     def getInfoFromWeb(self, musicId):
         # xpath for name and lrc:
@@ -71,6 +65,12 @@ class netease_music:
         return os.path.join(MSCDIR, name + '.mp3')
 
     def decrypt(self, name):
+        def _decrypt(cachePath):
+            with open(cachePath, 'rb') as f:
+                btay = bytearray(f.read())
+            for i, j in enumerate(btay):
+                btay[i] = j ^ 0xa3
+            return btay
         cachePath = os.path.join(self.path, name)
         musicId = self.name_id[name]
         idpath = os.path.join(MSCDIR, musicId + '.mp3')
@@ -78,14 +78,14 @@ class netease_music:
         path = self.getPath(info, musicId)
         if not os.path.exists(path):
             with open(path, 'wb') as f:
-                f.write(bytes(self._decrypt(cachePath)))
+                f.write(bytes(_decrypt(cachePath)))
 
         '''  get info from index file
         if not os.path.exists(idpath):
             with open(idpath, 'wb') as f:
-                f.write(bytes(self._decrypt(cachePath)))
+                f.write(bytes(_decrypt(cachePath)))
         try:
-            info = self.getInfoFromFile(idpath)
+            info = dict(MP3(idpath, ID3=EasyID3))
         except:
             info = {}
         if info != {}:
@@ -98,13 +98,6 @@ class netease_music:
             os.remove(idpath)
         '''
         return info, path
-
-    def _decrypt(self, cachePath):
-        with open(cachePath, 'rb') as f:
-            btay = bytearray(f.read())
-        for i, j in enumerate(btay):
-            btay[i] = j ^ 0xa3
-        return btay
 
     def getLyric(self, musicId):
         url = 'http://music.163.com/api/song/lyric?id=' + musicId + '&lv=1&tv=-1'
