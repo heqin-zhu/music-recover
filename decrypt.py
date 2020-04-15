@@ -1,24 +1,17 @@
 # coding : utf-8
-import urllib3
 import os
 import sys
 import getpass
+import urllib3
 import requests
 
 from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, USLT
 
-'''
 # ID3 info:
-keyMap = {'APIC': 'cover',
-          'TIT2': 'title',
-          'TPE1': 'artist',
-          'TRCK': 'track',
-          'TALB': 'album',
-          'USLT': 'lyric'
-          }
-'''
+tagMap = {'cover': APIC, 'title': TIT2,
+          'artist': TPE1, 'album': TALB, 'lyric': USLT}
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 headers = {'User-agent': 'Mozilla/5.0'}
 MSCDIR = './mp3'
@@ -115,52 +108,46 @@ class netease_music:
 
     def getLyric(self, musicId):
         url = 'http://music.163.com/api/song/lyric?id=' + musicId + '&lv=1&tv=-1'
+        lrc = ''
         try:
             lyric = requests.get(url, headers=headers).json()
             lrc = lyric['lrc']['lyric']
             tlrc = lyric['tlyric']['lyric']
-            if tlrc:
-                # merge multi-lang lyrics
-                dic = {}
-                for i in lrc.splitlines():
-                    a = i.replace('[', ']').strip().split("]")
-                    dic[a[1].strip()+' '] = a[-1].strip()
-                tdic = {}
-                for m in tlrc.splitlines():
-                    n = m.replace('[', ']').strip().split(']')
-                    tdic[n[1].strip()] = n[-1].strip()
-                dicCopy = dic.copy()
-                dicCopy.update(tdic)
-                lines = []
-                for k, v in sorted(dicCopy.items(), key=lambda item: item[0]):
-                    lines.append("[%s]%s" % (k.strip(), v))
-                lrc = "\n".join(lines)
-            return lrc
+            # merge multi-lang lyrics
+            dic = {}
+            for i in lrc.splitlines():
+                a = i.replace('[', ']').strip().split("]")
+                dic[a[1].strip()+' '] = a[-1].strip()
+            tdic = {}
+            for m in tlrc.splitlines():
+                n = m.replace('[', ']').strip().split(']')
+                tdic[n[1].strip()] = n[-1].strip()
+            dicCopy = dic.copy()
+            dicCopy.update(tdic)
+            lines = []
+            for k, v in sorted(dicCopy.items(), key=lambda item: item[0]):
+                lines.append("[%s]%s" % (k.strip(), v))
+            lrc = "\n".join(lines)
         except Exception as e:
-            return ''
+            pass
+        return lrc
 
     def setID3(self, lrc, info, path):
         tags = ID3(path)
         # remove old unsychronized lyrics
         if len(tags.getall("USLT")) != 0:
             tags.delall("USLT")
-
-        if ('album' in info):
-            tags.add(TALB(encoding=3, lang='', desc='', text=info['album'][0]))
-        if ('title' in info):
-            tags.add(TIT2(encoding=3, lang='', desc='', text=info['title'][0]))
-        if ('artist' in info):
-            tags.add(TPE1(encoding=3, lang='',
-                          desc='', text=info['artist'][0]))
-        if ('cover' in info):
-            tags.add(APIC(
-                encoding=3,
-                mime='image/png',
-                type=3,
-                desc='cover',
-                data=requests.get(info['cover'][0],
-                                  stream=True, headers=headers).raw.read()
-            ))
+        for t in ['album', 'title', 'artist']:
+            t in info and tags.add(
+                tagMap[t](encoding=3, lang='', desc='', text=info[t][0]))
+        'cover' in info and tags.add(APIC(
+            encoding=3,
+            mime='image/png',
+            type=3,
+            desc='cover',
+            data=requests.get(info['cover'][0], stream=True,
+                              headers=headers).raw.read()
+        ))
         tags.add(USLT(encoding=3, lang='eng', desc='aaa', text=lrc))
         tags.save()
 
@@ -188,7 +175,7 @@ if __name__ == '__main__':
 
     else:  # mac or linux
         path = pre + '/Library/Containers/com.netease.163music/Data/Caches/online_play_cache'
-    if not os.path.exists(path):
-        print('Directory "{}" does not exist, specify cache files directory instead'.format(path))
-    else:
+    if os.path.exists(path):
         netease_music(path).getMusic()
+    else:
+        print('Directory "{}" does not exist, specify cache files directory instead'.format(path))
