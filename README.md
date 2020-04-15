@@ -38,8 +38,8 @@ $ pip3 install -r requirements.txt
 
 - 如果要获得电脑上的缓存文件，那么可以不传入参数直接运行这个脚本`python3 decrypt.py`
 - 如果是手机上的（`一般是netease/cloudmusic[lite]/Cache/Music1`, 将其拷贝到电脑上），**或者上面情况出现没有找到文件夹，没有文件等错误**，那么需要指定缓存文件的位置作为参数运行(可以将缓存文件夹拷贝到当前目录重命名music, 然后运行`python3 decrypt.py music`)。
-
-结果保存在当前目录下的`mp3`:smiley: 
+- 已上传示例文件，可运行`python3 decrypt.py music` 进行尝试
+- 结果保存在当前目录下的`mp3`中:smiley: 
 
 ## 贡献
 [![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/0)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/0)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/1)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/1)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/2)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/2)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/3)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/3)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/4)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/4)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/5)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/5)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/6)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/6)[![](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/images/7)](https://sourcerer.io/fame/mbinary/mbinary/netease-music-cracker/links/7)

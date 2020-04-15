@@ -71,7 +71,7 @@ class netease_music:
         artist = dic['artist'][0]
         if artist in title:
             title = title.replace(artist, '').strip()
-        name = artist + ' - ' + title
+        name = title + '--' + artist
         for i in '>?*/\:"|<':
             name = name.replace(i, '-')  # convert to valid chars for file name
         self.id_name[musicId] = name
