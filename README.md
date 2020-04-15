@@ -16,6 +16,7 @@
 <!-- 控制图片: <img width="60" height="75" align="right" src="haha"> -->
 # 声明
 ![warning](images/warning.png)
+
 代码仅供技术交流，参考学习，请尊重版权,勿用于商业及非法用途，如产生法律纠纷与本人无关
 
 ## 介绍
@@ -36,7 +37,7 @@ $ pip3 install -r requirements.txt
 ![](images/flow-chart.png)
 
 - 如果要获得电脑上的缓存文件，那么可以不传入参数直接运行这个脚本`python3 decrypt.py`
-- 如果是手机上的（拷贝到电脑上），**或者上面情况出现没有找到文件夹，没有文件等错误**，那么需要指定缓存文件的位置作为参数运行(可以将缓存文件夹拷贝到当前目录重命名music, 然后运行`python3 decrypt.py music`)。
+- 如果是手机上的（`一般是netease/cloudmusic[lite]/Cache/Music1`, 将其拷贝到电脑上），**或者上面情况出现没有找到文件夹，没有文件等错误**，那么需要指定缓存文件的位置作为参数运行(可以将缓存文件夹拷贝到当前目录重命名music, 然后运行`python3 decrypt.py music`)。
 
 结果保存在当前目录下的`mp3`:smiley: 
 
