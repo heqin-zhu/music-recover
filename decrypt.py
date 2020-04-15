@@ -56,8 +56,6 @@ class netease_music:
         '''get the name of music from info dict'''
         title = dic['title'][0]
         artist = dic['artist'][0]
-        if artist in title:
-            title = title.replace(artist, '').strip()
         name = title + '--' + artist
         for i in '>?*/\:"|<':
             name = name.replace(i, '-')  # convert to valid chars for file name
@@ -128,8 +126,7 @@ class netease_music:
     def setID3(self, lrc, info, path):
         tags = ID3(path)
         # remove old unsychronized lyrics
-        if len(tags.getall("USLT")) != 0:
-            tags.delall("USLT")
+        len(tags.getall("USLT")) != 0 and tags.delall("USLT")
         for t in ['album', 'title', 'artist']:
             t in info and tags.add(
                 tagMap[t](encoding=3, lang='', desc='', text=info[t][0]))
