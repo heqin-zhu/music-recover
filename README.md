@@ -20,7 +20,7 @@
 代码仅供技术交流，参考学习，请尊重版权,勿用于商业及非法用途，如产生法律纠纷与本人无关
 
 ## 介绍
-从缓存文件得到 mp3 文件。这是[详细介绍](https://mbinary.coding.me/decrypt-netease-music.html) 
+从缓存文件得到 mp3 文件。这是[详细介绍](https://mbinary.xyz/decrypt-netease-music.html) 
 
 ## 依赖
 * python3.5+
