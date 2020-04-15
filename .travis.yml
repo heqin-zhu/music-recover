@@ -20,7 +20,6 @@ install: true
 # if one failed, the later will still be executed
 script: 
   - coverage run decrypt.py music
-  - coverage run decrypt.py nodir
 
 after_success:
   - codecov #运行codecov
