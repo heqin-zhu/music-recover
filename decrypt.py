@@ -1,4 +1,5 @@
 # coding : utf-8
+import re
 import os
 import sys
 import getpass
@@ -22,16 +23,15 @@ class netease_music:
     def __init__(self, path=''):
         '''path: direcoty that contains cache files'''
         self.path = path
-        self.files = [i for i in os.listdir(
-            path) if i.endswith('.uc') or i.endswith('.uc!')]
-        if self.files == []:
-            print('No cache file found in "{}"'.format(path))
-        else:
+        self.id_name = {i[:i.find('-')]: i for i in os.listdir(path)
+                        if i.endswith('.uc') or i.endswith('.uc!')}
+        if self.id_name:
             if not os.path.exists(MSCDIR):
                 os.mkdir(MSCDIR)
-            print('[ ]   Output Path: ' + MSCDIR)
-        self.id_name = {i[:i.find('-')]: i for i in self.files}
-        self.name_id = {j: i for i, j in self.id_name.items()}
+            print('Input :', path)
+            print('Output:', MSCDIR)
+        else:
+            print('No cache file found in "{}"'.format(path))
 
     def getInfoFromWeb(self, musicId):
         # xpath for name and lrc:
@@ -56,13 +56,14 @@ class netease_music:
         '''get the name of music from info dict'''
         title = dic['title'][0]
         artist = dic['artist'][0]
-        name = title + '--' + artist
+        name = title + '(' + artist+')'
         for i in '>?*/\:"|<':
             name = name.replace(i, '-')  # convert to valid chars for file name
+        name = re.sub('\s', '_',name)
         self.id_name[musicId] = name
         return os.path.join(MSCDIR, name + '.mp3')
 
-    def decrypt(self, name):
+    def decrypt(self, musicId, name):
         def _decrypt(cachePath):
             with open(cachePath, 'rb') as f:
                 btay = bytearray(f.read())
@@ -70,7 +71,6 @@ class netease_music:
                 btay[i] = j ^ 0xa3
             return btay
         cachePath = os.path.join(self.path, name)
-        musicId = self.name_id[name]
         idpath = os.path.join(MSCDIR, musicId + '.mp3')
         info = self.getInfoFromWeb(musicId)
         path = self.getPath(info, musicId)
@@ -143,10 +143,9 @@ class netease_music:
 
     def getMusic(self):
         ct = 0  # count successed files
-        for name in self.files:
-            musicId = self.name_id[name]
+        for musicId, name in self.id_name.items():
             try:
-                info, path = self.decrypt(name)
+                info, path = self.decrypt(musicId, name)
                 ct += 1
                 print('[{}]'.format(ct).ljust(6) + self.id_name[musicId])
                 self.setID3(self.getLyric(musicId), info, path)
