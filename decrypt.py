@@ -21,7 +21,7 @@ MSCDIR = './mp3'
 
 class netease_music:
     def __init__(self, path=''):
-        '''path: direcoty that contains cache files'''
+        '''path: direcotory that contains cache files'''
         self.path = path
         self.id_name = {i[:i.find('-')]: i for i in os.listdir(path)
                         if i.endswith('.uc') or i.endswith('.uc!')}
@@ -59,7 +59,7 @@ class netease_music:
         name = title + '(' + artist+')'
         for i in '>?*/\:"|<':
             name = name.replace(i, '-')  # convert to valid chars for file name
-        name = re.sub('\s', '_',name)
+        name = re.sub('\s', '_', name)
         self.id_name[musicId] = name
         return os.path.join(MSCDIR, name + '.mp3')
 
@@ -142,7 +142,7 @@ class netease_music:
         tags.save()
 
     def getMusic(self):
-        ct = 0  # count successed files
+        ct = 0  # count converted files
         for musicId, name in self.id_name.items():
             try:
                 info, path = self.decrypt(musicId, name)
