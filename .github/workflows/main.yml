@@ -1,0 +1,25 @@
+name: build
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  codecov:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+      with:
+          python-version: 3.5
+    - name: install python modules and generate report
+      run: |
+          pip install -r requirements.txt
+          pip install pytest
+          pip install pytest-cov
+          pytest --cov=./ --cov-report=xml
+    - name: upload coverage to codecov
+      uses: codecov/codecov-action@v1
+      with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./coverage.xml
