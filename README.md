@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](LICENSE)
 [![Contributors](https://img.shields.io/github/contributors/mbinary/netease-music-cracker.svg)](https://github.com/mbinary/netease-music-cracker/graphs/contributors)
 [![Language](https://img.shields.io/badge/language-python3.5+-orange.svg)](.)
-[![build](https://github.com/mbinary/netease-music-cracker/workflows/build/badge.svg)]()
+[![test](https://github.com/mbinary/netease-music-cracker/workflows/test/badge.svg)]()
 [![Coverage](https://codecov.io/gh/mbinary/netease-music-cracker/branch/master/graph/badge.svg)](https://codecov.io/github/mbinary/netease-music-cracker?branch=master)
 
 [![codebeat badge](https://codebeat.co/badges/875e7de3-895b-479e-9384-c5db71930c15)](https://codebeat.co/projects/github-com-mbinary-netease-music-cracker-master)
