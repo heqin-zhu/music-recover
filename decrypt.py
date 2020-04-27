@@ -20,9 +20,9 @@ MSCDIR = './mp3'
 
 
 class netease_music:
-    def __init__(self, path=''):
+    def __init__(self, path):
         '''path: direcotory that contains cache files'''
-        self.path = path
+        self.path = os.path.abspath(path)
         self.id_name = {i[:i.find('-')]: i for i in os.listdir(path)
                         if i.endswith('.uc') or i.endswith('.uc!')}
         if self.id_name:
@@ -153,18 +153,18 @@ class netease_music:
                 pass
 
 
-if __name__ == '__main__':
-    platform = os.sys.platform.lower()
-    user = getpass.getuser()
-    pre = '/'.join(os.getcwd().split(os.sep)[:3])
-    if len(sys.argv) > 1:
-        path = os.path.abspath(sys.argv[1].strip())
-    elif platform.startswith('win'):  # windows
-        path = pre + '/AppData/Local/Netease/CloudMusic/Cache/Cache'
-
-    else:  # mac or linux
-        path = pre + '/Library/Containers/com.netease.163music/Data/Caches/online_play_cache'
-    if os.path.exists(path):
+def main(path=''):
+    if not path:
+        pre = '/'.join(os.getcwd().split(os.sep)[:3])
+        if os.sys.platform.lower().startswith('win'):  # windows
+            path = pre + '/AppData/Local/Netease/CloudMusic/Cache/Cache'
+        else:  # mac or linux
+            path = pre + '/Library/Containers/com.netease.163music/Data/Caches/online_play_cache'
+    if os.path.isdir(path):
         netease_music(path).getMusic()
     else:
         print('Directory "{}" does not exist, specify cache files directory instead'.format(path))
+
+
+if __name__ == '__main__':
+    main() if len(sys.argv) < 2 else main(sys.argv[1])

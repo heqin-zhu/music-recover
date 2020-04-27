@@ -4,3 +4,4 @@ mp3/**
 !.travis.yml
 __pycache__/**
 htmlcov
+coverage*
