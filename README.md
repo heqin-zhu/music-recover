@@ -1,27 +1,26 @@
 <div align="center">
-    <h1>netease-music-cracker</h1>
+    <h1>music-recover</h1>
     <br>
     <img src="images/logo.png">
 </div>
 
-[![Stars](https://img.shields.io/github/stars/mbinary/netease-music-cracker.svg?label=Stars&style=social)](https://github.com/mbinary/netease-music-cracker/stargazers)
-[![Forks](https://img.shields.io/github/forks/mbinary/netease-music-cracker.svg?label=Fork&style=social)](https://github.com/mbinary/netease-music-cracker/network/members)
+[![Stars](https://img.shields.io/github/stars/mbinary/music-recover.svg?label=Stars&style=social)](https://github.com/mbinary/music-recover/stargazers)
+[![Forks](https://img.shields.io/github/forks/mbinary/music-recover.svg?label=Fork&style=social)](https://github.com/mbinary/music-recover/network/members)
 [![License](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](LICENSE)
-[![Contributors](https://img.shields.io/github/contributors/mbinary/netease-music-cracker.svg)](https://github.com/mbinary/netease-music-cracker/graphs/contributors)
+[![Contributors](https://img.shields.io/github/contributors/mbinary/music-recover.svg)](https://github.com/mbinary/music-recover/graphs/contributors)
 [![Language](https://img.shields.io/badge/language-python3.5+-orange.svg)](.)
-[![test](https://github.com/mbinary/netease-music-cracker/workflows/test/badge.svg)]()
-[![Coverage](https://codecov.io/gh/mbinary/netease-music-cracker/branch/master/graph/badge.svg)](https://codecov.io/github/mbinary/netease-music-cracker?branch=master)
+[![Coverage](https://codecov.io/gh/mbinary/music-recover/branch/master/graph/badge.svg)](https://codecov.io/github/mbinary/music-recover?branch=master)
 
-[![codebeat badge](https://codebeat.co/badges/875e7de3-895b-479e-9384-c5db71930c15)](https://codebeat.co/projects/github-com-mbinary-netease-music-cracker-master)
+[![codebeat badge](https://codebeat.co/badges/875e7de3-895b-479e-9384-c5db71930c15)](https://codebeat.co/projects/github-com-mbinary-music-recover-master)
 <!--  [![License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)  copy LICENCE -->
 <!-- 控制图片: <img width="60" height="75" align="right" src="haha"> -->
 # 声明
 ![warning](images/warning.png)
 
-代码仅供技术交流，参考学习，请尊重版权,勿用于商业及非法用途，如产生法律纠纷与本人无关
+代码仅供技术交流，参考学习，请尊重版权，勿用于商业及非法用途，如产生法律纠纷与本人无关
 
 ## 介绍
-从缓存文件得到 mp3 文件。这是[详细介绍](https://mbinary.xyz/decrypt-netease-music.html) 
+将缓存文件转换为 mp3 文件。这是[详细介绍](https://mbinary.xyz/decrypt-netease-music.html) 
 
 ## 依赖
 * python3.5+
@@ -29,7 +28,7 @@
   - requests
   - mutagen
 
-运行 如下命令安装
+运行命令安装
 ```shell
 $ pip3 install -r requirements.txt
 ```
